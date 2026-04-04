@@ -30,7 +30,7 @@ export default function LoginModal({ onClose, onLoginSuccess, onOpenRegister }) 
     setToast(null);
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/auth/login", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email.trim(), password: form.password }),
