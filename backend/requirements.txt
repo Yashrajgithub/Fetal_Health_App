@@ -1,0 +1,10 @@
+flask
+flask-cors
+flask-bcrypt
+flask-jwt-extended
+pymongo
+python-dotenv
+numpy
+joblib
+reportlab
+gunicorn
