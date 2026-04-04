@@ -18,7 +18,7 @@ export default function RegisterModal({ onClose, onRegisterSuccess }) {
 
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
