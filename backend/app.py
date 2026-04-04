@@ -135,31 +135,50 @@ def health_check():
 # ---------------------------
 @app.route("/api/auth/register", methods=["POST"])
 def register():
-    """
-    Expected JSON: { "username": "...", "email": "...", "password": "..." }
-    Will check if email or username exists and return 400 if so.
-    """
-    data = request.get_json(force=True)
-    username = data.get("username", "").strip()
-    email = data.get("email", "").strip().lower()
-    password = data.get("password", "")
+    try:
+        data = request.get_json(force=True)
+        print("📥 DATA RECEIVED:", data)
 
-    if not username or not email or not password:
-        return jsonify({"error": "username, email and password are required"}), 400
+        if not data:
+            return jsonify({"error": "No JSON received"}), 400
 
-    # check existence
-    if users_col.find_one({"email": email}) or users_col.find_one({"username": username}):
-        return jsonify({"error": "User with that email or username already exists"}), 400
+        username = data.get("username", "").strip()
+        email = data.get("email", "").strip().lower()
+        password = data.get("password", "")
 
-    pw_hash = bcrypt.generate_password_hash(password).decode("utf-8")
-    user_doc = {
-        "username": username,
-        "email": email,
-        "password": pw_hash,
-        "created_at": datetime.utcnow()
-    }
-    res = users_col.insert_one(user_doc)
-    return jsonify({"message": "User registered", "user_id": str(res.inserted_id)}), 201
+        if not username or not email or not password:
+            return jsonify({"error": "username, email and password are required"}), 400
+
+        print("🔍 Checking existing user...")
+
+        if users_col.find_one({"email": email}) or users_col.find_one({"username": username}):
+            return jsonify({"error": "User already exists"}), 400
+
+        print("🔐 Hashing password...")
+
+        pw_hash = bcrypt.generate_password_hash(password).decode("utf-8")
+
+        user_doc = {
+            "username": username,
+            "email": email,
+            "password": pw_hash,
+            "created_at": datetime.utcnow()
+        }
+
+        print("💾 Inserting into MongoDB...")
+
+        res = users_col.insert_one(user_doc)
+
+        print("✅ User created:", res.inserted_id)
+
+        return jsonify({
+            "message": "User registered",
+            "user_id": str(res.inserted_id)
+        }), 201
+
+    except Exception as e:
+        print("❌ REGISTER ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api/auth/login", methods=["POST"])
 def login():
