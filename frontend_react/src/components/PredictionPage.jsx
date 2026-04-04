@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+const API = process.env.REACT_APP_API_URL;
 
 /**
  * PredictionPage.jsx
@@ -45,7 +46,7 @@ export default function PredictionPage({ patientData, onBack }) {
 
   async function fetchPatients() {
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/patients", {
+      const res = await fetch(`${API}/api/patients`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;
@@ -105,7 +106,7 @@ export default function PredictionPage({ patientData, onBack }) {
           ),
         };
 
-        const res = await fetch("http://127.0.0.1:5000/api/patients", {
+        const res = fetch(`${API}/api/patients`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -140,7 +141,7 @@ export default function PredictionPage({ patientData, onBack }) {
         Object.entries(formData).map(([k, v]) => [k, Number(v)])
       );
 
-      const res = await fetch("http://127.0.0.1:5000/predict", {
+      const res = await fetch(`${API}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
