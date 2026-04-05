@@ -8,3 +8,4 @@ numpy
 joblib
 reportlab
 gunicorn
+scikit-learn
