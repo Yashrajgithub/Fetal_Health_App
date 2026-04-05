@@ -106,7 +106,7 @@ export default function PredictionPage({ patientData, onBack }) {
           ),
         };
 
-        const res = fetch(`${API}/api/patients`, {
+        const res = await fetch(`${API}/api/patients`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
