@@ -12,6 +12,7 @@ const ImagePredict = ({ onBack }) => {
   const [loadingText, setLoadingText] = useState("");
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("idle");
+  const API = process.env.REACT_APP_API_URL;
 
   // 🔥 DOWNLOAD REPORT
   const downloadReport = async () => {
@@ -31,7 +32,7 @@ const ImagePredict = ({ onBack }) => {
 
       const base64Image = preview ? await toBase64(preview) : null;
 
-      const res = await fetch("http://127.0.0.1:5000/api/download-report", {
+      const res = await fetch(`${API}/api/download-report`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -143,7 +144,7 @@ const ImagePredict = ({ onBack }) => {
     // ✅ STEP 2: CALL API (AFTER extraction)
     let data;
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/predict-image", {
+      const res = await fetch(`${API}/api/predict-image`, {
         method: "POST",
         body: formData,
       });
