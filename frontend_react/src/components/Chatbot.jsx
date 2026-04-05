@@ -1,37 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
+import { chatbotQA } from "../data/chatbotData";
 
 export default function Chatbot() {
-  const chatbotQA = [
-    {
-      question: "baseline fhr",
-      answer:
-        "Baseline FHR is the average fetal heart rate over 10 minutes. Normal range: 110–160 bpm.",
-    },
-    {
-      question: "histogram variance",
-      answer:
-        "Histogram variance measures variability in fetal heart rate.",
-    },
-    {
-      question: "suspect",
-      answer:
-        "A 'Suspect' result means irregular patterns — further monitoring needed.",
-    },
-    {
-      question: "pathologic",
-      answer:
-        "A 'Pathologic' result indicates fetal distress. Immediate attention required.",
-    },
-    {
-      question: "ai model",
-      answer:
-        "This app uses an XGBoost model trained on CTG parameters.",
-    },
-  ];
-
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "Hello! 🤖 I'm your CTG Assistant." },
+    { sender: "bot", text: "Hello! 🤖 I'm your CTG Assistant.", time: getTime() },
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -40,7 +13,14 @@ export default function Chatbot() {
   const chatEndRef = useRef(null);
   const recognitionRef = useRef(null);
 
-  // 🎤 Voice input
+  function getTime() {
+    return new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  // 🎤 Voice Input (AUTO SEND)
   useEffect(() => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -50,7 +30,12 @@ export default function Chatbot() {
       recognition.lang = "en-US";
 
       recognition.onresult = (e) => {
-        setInput(e.results[0][0].transcript);
+        const transcript = e.results[0][0].transcript;
+        setInput(transcript);
+
+        setTimeout(() => {
+          handleSend(transcript);
+        }, 500);
       };
 
       recognitionRef.current = recognition;
@@ -61,24 +46,29 @@ export default function Chatbot() {
     recognitionRef.current?.start();
   };
 
-  // 🔊 Speech output
+  // 🔊 Speak
   const speak = (text) => {
+    speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     speechSynthesis.speak(utter);
   };
 
-  // 🧠 AI logic
-  const getBotReply = (text) => {
-    text = text.toLowerCase();
+  // 🧠 Smart AI Logic
+  const getBotReply = (userInput) => {
+    const text = userInput.toLowerCase();
 
     if (/(hi|hello|hey)/.test(text))
       return "Hey! 👋 Ask me anything about CTG.";
 
     if (text.includes("thank")) return "You're welcome 😊";
 
-    if (context === "baseline fhr" && text.includes("normal"))
-      return "Normal range is 110–160 bpm.";
+    if (text.includes("difference"))
+      return "Normal = healthy, Suspect = caution, Pathologic = high risk.";
 
+    if (context === "baseline fhr" && text.includes("normal"))
+      return "Normal baseline FHR is 110–160 bpm.";
+
+    // keyword scoring
     let best = null;
     let max = 0;
 
@@ -94,139 +84,162 @@ export default function Chatbot() {
       }
     });
 
-    if (best) {
+    if (best && max > 0) {
       setContext(best.question);
       return best.answer;
     }
 
-    return "Try asking about CTG parameters like baseline FHR.";
+    // smart fallback
+    if (text.includes("what") || text.includes("explain"))
+      return "I may not have exact info 🤔 but I can help with CTG concepts like baseline FHR, variability, suspect, and pathologic.";
+
+    if (text.includes("how"))
+      return "You can analyze CTG from the Predict page. Need help with parameters?";
+
+    return `I’m not sure 🤖  
+
+Try asking:
+• Baseline FHR  
+• Variability  
+• Suspect vs Pathologic  
+• CTG analysis`;
   };
 
   // 📩 Send
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = (voiceInput = null) => {
+    const msg = voiceInput || input;
+    if (!msg.trim()) return;
 
-    setMessages((prev) => [...prev, { sender: "user", text: input }]);
+    const userMsg = { sender: "user", text: msg, time: getTime() };
+    setMessages((prev) => [...prev, userMsg]);
 
-    const reply = getBotReply(input);
+    const reply = getBotReply(msg);
 
     setTyping(true);
 
     setTimeout(() => {
       setTyping(false);
       speak(reply);
-      setMessages((prev) => [...prev, { sender: "bot", text: reply }]);
-    }, 700);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: reply, time: getTime() },
+      ]);
+    }, 800);
 
     setInput("");
   };
 
-  // auto scroll
+  // scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
     <>
-      {/* 💅 INLINE CSS */}
+      {/* 🎨 ADVANCED CSS */}
       <style>{`
         .fab {
           position: fixed;
           bottom: 20px;
           right: 20px;
-          background: #3b82f6;
+          background: linear-gradient(135deg,#3b82f6,#8b5cf6);
           color: white;
-          padding: 14px;
+          padding: 15px;
           border-radius: 50%;
           cursor: pointer;
-          font-size: 20px;
         }
 
         .modal {
           position: fixed;
           bottom: 80px;
           right: 20px;
-          width: 320px;
-          background: white;
+          width: 340px;
+          height: 480px;
+          background: rgba(255,255,255,0.9);
+          backdrop-filter: blur(15px);
           border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
           display: flex;
           flex-direction: column;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
 
         .header {
-          background: #3b82f6;
+          padding: 12px;
           color: white;
-          padding: 10px;
-          border-radius: 20px 20px 0 0;
+          background: linear-gradient(135deg,#3b82f6,#8b5cf6);
         }
 
         .body {
-          max-height: 300px;
+          flex: 1;
           overflow-y: auto;
           padding: 10px;
         }
 
         .msg {
-          margin: 6px 0;
-          padding: 8px 12px;
-          border-radius: 10px;
-          font-size: 14px;
+          margin: 8px 0;
+          padding: 10px;
+          border-radius: 12px;
+          max-width: 75%;
+          animation: fadeIn 0.3s;
         }
 
         .user {
-          background: #dbeafe;
-          text-align: right;
+          background: #3b82f6;
+          color: white;
+          margin-left: auto;
         }
 
         .bot {
-          background: #f3f4f6;
+          background: #f1f5f9;
+        }
+
+        .time {
+          font-size: 10px;
+          opacity: 0.6;
+        }
+
+        @keyframes fadeIn {
+          from {opacity:0; transform:translateY(5px);}
+          to {opacity:1;}
         }
 
         .input {
           display: flex;
           padding: 10px;
-          border-top: 1px solid #eee;
         }
 
         .input input {
           flex: 1;
-          padding: 8px;
-          border-radius: 8px;
+          padding: 10px;
+          border-radius: 10px;
           border: 1px solid #ccc;
         }
 
         .input button {
           margin-left: 5px;
-          padding: 8px;
+          padding: 10px;
           border: none;
           background: #3b82f6;
           color: white;
-          border-radius: 8px;
-          cursor: pointer;
+          border-radius: 10px;
         }
 
         .quick {
+          padding: 5px;
           display: flex;
           flex-wrap: wrap;
           gap: 5px;
-          padding: 5px;
         }
 
         .quick button {
-          background: #eee;
-          border: none;
           padding: 5px 8px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 12px;
+          border-radius: 8px;
+          border: none;
+          background: #eee;
         }
       `}</style>
 
-      {/* 💬 Floating button */}
-      <div className="fab" onClick={() => setOpen(!open)}>
-        💬
-      </div>
+      <div className="fab" onClick={() => setOpen(!open)}>💬</div>
 
       {open && (
         <div className="modal">
@@ -236,15 +249,16 @@ export default function Chatbot() {
             {messages.map((m, i) => (
               <div key={i} className={`msg ${m.sender}`}>
                 {m.sender === "bot" ? "🤖" : "👤"} {m.text}
+                <div className="time">{m.time}</div>
               </div>
             ))}
 
-            {typing && <div className="msg bot">🤖 Typing...</div>}
-            <div ref={chatEndRef} />
+            {typing && <div className="msg bot">🤖 ...</div>}
+            <div ref={chatEndRef}></div>
           </div>
 
           <div className="quick">
-            {["Baseline FHR", "Suspect", "Pathologic"].map((q) => (
+            {["Baseline FHR", "Variability", "Suspect", "Pathologic"].map((q) => (
               <button key={q} onClick={() => setInput(q)}>
                 {q}
               </button>
@@ -255,11 +269,11 @@ export default function Chatbot() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
               placeholder="Type or speak..."
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
             <button onClick={startListening}>🎤</button>
-            <button onClick={handleSend}>➤</button>
+            <button onClick={() => handleSend()}>➤</button>
           </div>
         </div>
       )}
