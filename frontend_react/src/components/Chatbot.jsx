@@ -48,11 +48,20 @@ export default function Chatbot() {
 
   // 🔊 Speak
   const speak = (text) => {
-    speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(utter);
-  };
+  const cleanText = text.replace(/[\p{Emoji}]/gu, "");
 
+  const utter = new SpeechSynthesisUtterance(cleanText);
+
+  const voices = speechSynthesis.getVoices();
+  utter.voice = voices.find(v => v.name.includes("Google")) || voices[0];
+
+  utter.rate = 0.95; // more natural
+  utter.pitch = 1;
+
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utter);
+  };
+  
   // 🧠 Smart AI Logic
   const getBotReply = (userInput) => {
     const text = userInput.toLowerCase();
