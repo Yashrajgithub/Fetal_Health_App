@@ -47,14 +47,25 @@ users_col = db["users"]        # store doctors
 patients_col = db["patients"]  # store patient records
 
 # ---------------------------
-# Load model & scaler (existing)
+# Load model & scaler (fixed for deployment)
 # ---------------------------
 try:
-    model = joblib.load('fetal_health_model.joblib')
-    scaler = joblib.load('fetal_health_scaler.joblib')
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    model_path = os.path.join(BASE_DIR, 'fetal_health_model.joblib')
+    scaler_path = os.path.join(BASE_DIR, 'fetal_health_scaler.joblib')
+
+    print("📁 BASE DIR:", BASE_DIR)
+    print("📁 MODEL PATH:", model_path)
+    print("📁 SCALER PATH:", scaler_path)
+
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
+
     print("✅ Model and scaler loaded successfully!")
+
 except Exception as e:
-    print("❌ Error loading model/scaler:", e)
+    print("❌ Error loading model/scaler:", str(e))
     model = None
     scaler = None
 
