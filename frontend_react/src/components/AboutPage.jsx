@@ -5,50 +5,50 @@ export default function AboutPage() {
   useRevealAnimation();
 
   const features = [
-    {
-      icon: "🏥",
-      title: "Understanding Fetal Distress",
-      text: "Fetal distress occurs when the fetus is not receiving enough oxygen. Early detection helps prevent complications and ensures safer outcomes.",
-    },
-    {
-      icon: "📊",
-      title: "Dual Prediction System",
-      text: "Supports both manual CTG parameter entry and direct CTG image upload for flexible and efficient fetal health analysis.",
-    },
-    {
-      icon: "🤖",
-      title: "AI-Powered Analysis",
-      text: "Advanced ML models analyze 21 CTG features or extract insights from uploaded CTG images to classify fetal condition.",
-    },
-    {
-      icon: "🧠",
-      title: "Clinical Decision Support",
-      text: "Provides fast, reliable predictions to assist healthcare professionals in making data-driven decisions.",
-    },
-  ];
+  {
+    icon: "⚙️",
+    title: "From Manual to Intelligent System",
+    text: "Initially designed for manual entry of 21 CTG parameters, the system is now enhanced with automated image-based prediction for faster analysis.",
+  },
+  {
+    icon: "📊",
+    title: "Manual Prediction Module",
+    text: "Users can input 21 CTG features manually to get accurate fetal condition predictions using trained ML models.",
+  },
+  {
+    icon: "🖼️",
+    title: "CTG Image-Based Prediction",
+    text: "Upload CTG report images directly. The system extracts features and predicts fetal condition without manual data entry.",
+  },
+  {
+    icon: "🚀",
+    title: "Real-Time AI Decision Support",
+    text: "Combines both modules to deliver quick, reliable, and clinically useful predictions for Normal, Suspect, or Pathologic cases.",
+  },
+];
 
   const workflow = [
-    {
-      step: "1️⃣",
-      title: "Input Selection",
-      desc: "User chooses between manual parameter entry or CTG image upload.",
-    },
-    {
-      step: "2️⃣",
-      title: "Data Processing",
-      desc: "System preprocesses numerical data or extracts features from CTG images.",
-    },
-    {
-      step: "3️⃣",
-      title: "AI Prediction",
-      desc: "Trained ML models generate predictions based on input type.",
-    },
-    {
-      step: "4️⃣",
-      title: "Result & Insights",
-      desc: "Displays fetal condition (Normal, Suspect, Pathologic) with confidence.",
-    },
-  ];
+  {
+    step: "1️⃣",
+    title: "Choose Input Mode",
+    desc: "Select Manual Entry (21 parameters) or CTG Image Upload.",
+  },
+  {
+    step: "2️⃣",
+    title: "Input / Upload",
+    desc: "Enter values manually OR upload CTG report image.",
+  },
+  {
+    step: "3️⃣",
+    title: "Processing Engine",
+    desc: "System either scales numerical data or extracts features from image using ML pipeline.",
+  },
+  {
+    step: "4️⃣",
+    title: "Prediction Output",
+    desc: "Displays fetal condition with confidence score instantly.",
+  },
+];
 
   const team = [
     { initials: "SH", name: "Shreeya Holikatti", role: "Frontend Developer" },
@@ -262,8 +262,8 @@ export default function AboutPage() {
 
       <h2 className="about-title">Understanding Fetal Distress Detection</h2>
       <p className="about-subtitle">
-        An AI-powered healthcare system that analyzes fetal health using CTG data —
-        supporting both manual input and image-based prediction for improved clinical accuracy.
+      An advanced AI-based fetal distress detection system evolving from manual CTG parameter prediction
+      to a fully integrated platform supporting both manual input and CTG image-based analysis.
       </p>
 
       <div className="feature-grid">
