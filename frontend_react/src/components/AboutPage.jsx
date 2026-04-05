@@ -8,45 +8,45 @@ export default function AboutPage() {
     {
       icon: "🏥",
       title: "Understanding Fetal Distress",
-      text: "Fetal distress occurs when the fetus is not receiving enough oxygen. Early detection reduces risk and ensures better outcomes.",
+      text: "Fetal distress occurs when the fetus is not receiving enough oxygen. Early detection helps prevent complications and ensures safer outcomes.",
     },
     {
       icon: "📊",
-      title: "CTG Report Importance",
-      text: "CTG monitors fetal heart rate and uterine contractions to assess fetal well-being during pregnancy and labor.",
+      title: "Dual Prediction System",
+      text: "Supports both manual CTG parameter entry and direct CTG image upload for flexible and efficient fetal health analysis.",
     },
     {
       icon: "🤖",
-      title: "AI-Powered Predictions",
-      text: "Our ML model analyzes 21 CTG features to classify fetal condition as Normal, Suspect, or Pathologic.",
+      title: "AI-Powered Analysis",
+      text: "Advanced ML models analyze 21 CTG features or extract insights from uploaded CTG images to classify fetal condition.",
     },
     {
       icon: "🧠",
-      title: "Clinical Support",
-      text: "Assists medical professionals in faster, data-driven fetal assessment with improved reliability.",
+      title: "Clinical Decision Support",
+      text: "Provides fast, reliable predictions to assist healthcare professionals in making data-driven decisions.",
     },
   ];
 
   const workflow = [
     {
       step: "1️⃣",
-      title: "Data Entry",
-      desc: "Clinician inputs CTG parameters via frontend form.",
+      title: "Input Selection",
+      desc: "User chooses between manual parameter entry or CTG image upload.",
     },
     {
       step: "2️⃣",
-      title: "Preprocessing",
-      desc: "Backend scales and validates input data using trained scaler.",
+      title: "Data Processing",
+      desc: "System preprocesses numerical data or extracts features from CTG images.",
     },
     {
       step: "3️⃣",
       title: "AI Prediction",
-      desc: "XGBoost model predicts fetal condition in real time.",
+      desc: "Trained ML models generate predictions based on input type.",
     },
     {
       step: "4️⃣",
-      title: "Visualization",
-      desc: "Prediction and confidence level displayed on dashboard.",
+      title: "Result & Insights",
+      desc: "Displays fetal condition (Normal, Suspect, Pathologic) with confidence.",
     },
   ];
 
@@ -54,7 +54,7 @@ export default function AboutPage() {
     { initials: "SH", name: "Shreeya Holikatti", role: "Frontend Developer" },
     { initials: "LC", name: "Laxmi Chavan", role: "Backend Developer" },
     { initials: "UK", name: "Urjeeta Kasabe", role: "ML Engineer" },
-    { initials: "YK", name: "Yashraj Kalshetti", role: "Database Manager" },
+    { initials: "YK", name: "Yashraj Kalshetti", role: "Deployment & ML Integration" },
     { initials: "AK", name: "Amareswar Kore", role: "Data Specialist" },
   ];
 
@@ -83,7 +83,6 @@ export default function AboutPage() {
           line-height: 1.6;
         }
 
-        /* Feature cards */
         .feature-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -122,7 +121,6 @@ export default function AboutPage() {
           line-height: 1.5;
         }
 
-        /* HOW IT WORKS SECTION */
         .how-it-works {
           margin-top: 3rem;
           text-align: center;
@@ -178,7 +176,6 @@ export default function AboutPage() {
           line-height: 1.4;
         }
 
-        /* TEAM SECTION */
         .team-section {
           margin-top: 3rem;
           text-align: center;
@@ -265,8 +262,8 @@ export default function AboutPage() {
 
       <h2 className="about-title">Understanding Fetal Distress Detection</h2>
       <p className="about-subtitle">
-        A clinical AI system for analyzing fetal health using CTG data —
-        combining medical insight with data-driven intelligence.
+        An AI-powered healthcare system that analyzes fetal health using CTG data —
+        supporting both manual input and image-based prediction for improved clinical accuracy.
       </p>
 
       <div className="feature-grid">
@@ -279,7 +276,6 @@ export default function AboutPage() {
         ))}
       </div>
 
-      {/* HOW IT WORKS SECTION */}
       <div className="how-it-works">
         <h3 className="how-title">How It Works</h3>
         <div className="workflow-row">
@@ -293,7 +289,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* TEAM SECTION */}
       <div className="team-section">
         <h3 className="team-header">Development Team</h3>
         <div className="team-row">
