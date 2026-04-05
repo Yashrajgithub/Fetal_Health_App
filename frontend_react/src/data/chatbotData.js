@@ -32,6 +32,6 @@ export const chatbotQA = [
   {
     question: "help",
     answer:
-      "You can ask me about CTG terms, how predictions work, or what different results mean!",
+      "You can ask me about CTG terms, predictions, or fetal health insights!",
   },
 ];
