@@ -41,7 +41,7 @@ export default function Footer() {
 
         <p className="footer-credit">
           © {year} — Developed by{" "}
-          <span className="footer-highlight">Shreeya Holikatti & Team</span>
+          <span className="footer-highlight">Team FetalSense</span>
         </p>
       </div>
     </footer>
